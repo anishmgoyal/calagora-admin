@@ -1,0 +1,10 @@
+body {
+  background-color: #eee;
+  font-family: "Open Sans";
+  font-size: 90%;
+}
+
+* {
+  box-sizing: border-box !important;
+  word-wrap: break-word !important;
+}

@@ -1,0 +1,75 @@
+{{define "title"}}
+Calagora Administration
+{{end}}
+
+{{define "body"}}
+{{if .Session}}
+  <ul>
+    <li><a href="/email/mine">Your Email</a></li>
+    <li><a href="/email/support">Support Email</a></li>
+    <li><a href="/logout/">Logout</a></li>
+  </ul>
+{{else}}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    input {
+      border: 1px solid black;
+      border-radius: 0;
+      box-shadow: none;
+      padding: 0.2em;
+      width: 100%;
+    }
+    button {
+      padding: 0.2em;
+    }
+    body {
+      background-color: #eee;
+    }
+  </style>
+  <form action="/" method="post">
+    <table style="margin: 10% auto auto; width: 300px;">
+      <tr>
+        <th style="font-size: 1.4em;">
+          Calagora Administration
+        </th>
+      </tr>
+      {{if .Data.Error}}
+      <tr>
+        <td style="color: red">
+          Invalid Username or Password
+        </td>
+      </tr>
+      {{end}}
+      <tr>
+        <td>
+          <label for="username">Username</label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input name="username" id="username" type="text" autofocus />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <label for="password">Password</label>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <input name="password" id="password" type="password" />
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-top: 4px;">
+          <button type="submit" style="width: 100%;">
+            Login
+          </button>
+        </td>
+      </tr>
+    </table>
+  </form>
+{{end}}
+{{end}}

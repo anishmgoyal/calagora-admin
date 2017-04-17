@@ -1,0 +1,88 @@
+{{define "title"}}
+  Calagora Email
+{{end}}
+
+{{define "body"}}
+  <style>
+    body {
+      background-color: #eee;
+    }
+    td {
+      vertical-align: top;
+    }
+    .left a, .left a:visited {
+      color: blue;
+      display: block;
+      text-decoration: none;
+      padding: 0.3em;
+    }
+    .left a:hover {
+      background-color: #ddd;
+    }
+
+    .emails {
+      border-collapse: collapse;
+    }
+
+    .emails td, .emails th {
+      padding: 0.5em;
+      margin: 0;
+    }
+
+    .email-row:hover {
+      background-color: #e6e6e6;
+      cursor: pointer;
+    }
+  </style>
+  <table border="0" style="width: 100%; height: 100%; table-layout: fixed;">
+    <tr>
+      <td class="left" style="width: 15%;">
+        <div style="padding: 0.3em;">
+          Viewing {{.Data.CurrentAddress}}
+        </div>
+        <a id="inbox" href="/email/{{.Data.EmailAccountName}}/inbox">
+          Inbox
+        </a>
+        <a id="sent" href="/email/{{.Data.EmailAccountName}}/sent">
+          Sent
+        </a>
+        <a id="trash" href="/email/{{.Data.EmailAccountName}}/trash">
+          Trash
+        </a>
+        <a id="junk" href="/email/{{.Data.EmailAccountName}}/junk">
+          Junk
+        </a>
+        <a href="{{.Data.SwitchToHref}}">
+          Switch to {{.Data.SwitchToName}}
+        </a>
+        <a href="/logout">
+          Logout
+        </a>
+      </td>
+      <td class="right" style="width: 85%;">
+        <strong>From: </strong>{{.Data.Email.FromName}} &lt;{{.Data.Email.From}}&gt;<br />
+        <strong>Subject: </strong>{{.Data.Email.Subject}}<br />
+        {{$attachments := .Data.Email.Attachments}}
+        {{if gt (len $attachments) 0}}
+          <strong>Attachment{{if gt (len $attachments) 1}}s{{end}}: </strong>
+        {{end}}
+        {{range $i, $attachment := $attachments -}}
+          {{if gt $i 0}}, {{end}}
+          <a href="/attachment/{{$attachment.ID}}/{{$attachment.FileName}}" target="_blank">
+            {{$attachment.FileName -}}
+          </a>
+        {{- end}}
+        <div style="position: relative; padding: 1em;
+          background-color: white; border: 1px solid #ccc;">
+
+          {{- .Data.Email.FormattedText -}}
+        </div>
+        <div style="position: relative; white-space: pre-line; padding: 1em;
+          background-color: white; border: 1px solid #ccc;">
+
+          {{- .Data.Email.PlainText -}}
+        </div>
+      </td>
+    </tr>
+  </table>
+{{end}}

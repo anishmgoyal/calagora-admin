@@ -1,0 +1,127 @@
+{{define "title"}}
+  Calagora Email
+{{end}}
+
+{{define "body"}}
+  <style>
+    body {
+      background-color: #eee;
+    }
+    td {
+      vertical-align: top;
+    }
+    .left a, .left a:visited {
+      color: blue;
+      display: block;
+      text-decoration: none;
+      padding: 0.3em;
+    }
+    .left a:hover, {{.Data.ActiveSelector}} {
+      background-color: #ddd;
+    }
+
+    .emails {
+      border-collapse: collapse;
+    }
+
+    .emails td, .emails th {
+      padding: 0.5em;
+      margin: 0;
+    }
+
+    .email-row:hover {
+      background-color: #e6e6e6;
+      cursor: pointer;
+    }
+
+    .email-spamvirus, .email-spam {
+      opacity: 0.6;
+    }
+
+    .email-spamvirus, .email-virus {
+      background-color: #dd4444;
+      color: white;
+    }
+
+    .email-spamvirus:hover, .email-virus:hover {
+      background-color: #ff4444;
+    }
+  </style>
+  <table border="0" style="width: 100%; height: 100%; table-layout: fixed;">
+    <tr>
+      <td class="left" style="width: 15%;">
+        <div style="padding: 0.3em;">
+          Viewing {{.Data.CurrentAddress}}
+        </div>
+        <a id="inbox" href="/email/{{.Data.EmailAccountName}}/inbox">
+          Inbox
+        </a>
+        <a id="sent" href="/email/{{.Data.EmailAccountName}}/sent">
+          Sent
+        </a>
+        <a id="trash" href="/email/{{.Data.EmailAccountName}}/trash">
+          Trash
+        </a>
+        <a id="junk" href="/email/{{.Data.EmailAccountName}}/junk">
+          Junk
+        </a>
+        <a href="{{.Data.SwitchToHref}}">
+          Switch to {{.Data.SwitchToName}}
+        </a>
+        <a href="/logout">
+          Logout
+        </a>
+      </td>
+      <td class="right" style="width: 85%;">
+        <table class="emails" style="width: 100%; table-layout: fixed;">
+          <tr>
+            <th style="width: 2%; text-align: left;"></th>
+            <th style="width: 23%; text-align: left;">
+              From
+            </th>
+            <th style="width: 50%; text-align: left;">
+              Subject
+            </th>
+            <th style="width: 2%; text-align: left;"></th>
+            <th style="width: 23%; text-align: left;">
+              Received
+            </th>
+          </tr>
+          {{$accountName := .Data.EmailAccountName }}
+          {{range $i, $email := .Data.Emails}}
+            <tr onclick="window.location.href=&quot;/email/view/
+              {{- $accountName -}}/
+              {{- $email.ID -}} &quot;"
+              class="email-row
+                {{if (and $email.IsSpam $email.IsVirus)}}
+                  email-spamvirus
+                {{else if $email.IsSpam}}
+                  email-spam
+                {{else if $email.IsVirus}}
+                  email-virus
+                {{end}}
+              "
+              {{- if not $email.Read}} style="font-weight: bold;"{{end}}>
+
+              <td style="width: 2%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                {{if not $email.Read}}<i class="fi-asterisk"></i>{{end}}
+              </td>
+              <td style="width: 23%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                {{$email.FromName}}
+              </td>
+              <td style="width: 50%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                {{$email.Subject}}
+              </td>
+              <td style="width: 2%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                {{if $email.HasAttachments}}<i class="fi-paperclip"></i>{{end}}
+              </td>
+              <td style="width: 23%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis">
+                {{$email.Received}}
+              </td>
+            </tr>
+          {{end}}
+        </table>
+      </td>
+    </tr>
+  </table>
+{{end}}
